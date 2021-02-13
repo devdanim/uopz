@@ -99,21 +99,21 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 		zend_hash_index_find_ptr(&UOPZ(functions), (zend_long) table);
 	zend_string *key = zend_string_tolower(name);
 
-//	if (!functions || !zend_hash_exists(functions, key)) {
-//		if (clazz) {
-//			uopz_exception(
-//				"cannot delete method %s::%s, it was not added by uopz",
-//				ZSTR_VAL(clazz->name),
-//				ZSTR_VAL(name));
-//		} else {
-//			uopz_exception(
-//				"cannot delete function %s, it was not added by uopz",
-//				ZSTR_VAL(name));
-//		}
-//		/*zend_string_release(key);*/
-//		return 0;
-//	}
-//
+	if (!functions || !zend_hash_exists(functions, key)) {
+		if (clazz) {
+			uopz_exception(
+				"cannot delete method %s::%s, it was not added by uopz",
+				ZSTR_VAL(clazz->name),
+				ZSTR_VAL(name));
+		} else {
+			uopz_exception(
+				"cannot delete function %s, it was not added by uopz",
+				ZSTR_VAL(name));
+		}
+		/*zend_string_release(key);*/
+		return 0;
+	}
+
 //	if (clazz) {
 //		if (all) {
 //			zend_class_entry *next;
