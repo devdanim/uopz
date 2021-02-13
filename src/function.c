@@ -130,7 +130,7 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 	}
 
 	zend_hash_del(table, key);
-	zend_hash_del(functions, key);
+//	zend_hash_del(functions, key);
 	/*zend_string_release(key);*/
 	
 	return 1;
