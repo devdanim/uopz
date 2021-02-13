@@ -94,25 +94,25 @@ zend_bool uopz_add_function(zend_class_entry *clazz, zend_string *name, zval *cl
 } /* }}} */
 
 zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_bool all) { /* {{{ */
-	HashTable *table = clazz ? &clazz->function_table : CG(function_table);
-	HashTable *functions = (HashTable*) 
-		zend_hash_index_find_ptr(&UOPZ(functions), (zend_long) table);	
-	zend_string *key = zend_string_tolower(name);
+//	HashTable *table = clazz ? &clazz->function_table : CG(function_table);
+//	HashTable *functions = (HashTable*)
+//		zend_hash_index_find_ptr(&UOPZ(functions), (zend_long) table);
+//	zend_string *key = zend_string_tolower(name);
 
-	if (!functions || !zend_hash_exists(functions, key)) {
-		if (clazz) {
-			uopz_exception(
-				"cannot delete method %s::%s, it was not added by uopz",
-				ZSTR_VAL(clazz->name),
-				ZSTR_VAL(name));
-		} else {
-			uopz_exception(
-				"cannot delete function %s, it was not added by uopz",
-				ZSTR_VAL(name));
-		}
-		/*zend_string_release(key);*/
-		return 0;
-	}
+//	if (!functions || !zend_hash_exists(functions, key)) {
+//		if (clazz) {
+//			uopz_exception(
+//				"cannot delete method %s::%s, it was not added by uopz",
+//				ZSTR_VAL(clazz->name),
+//				ZSTR_VAL(name));
+//		} else {
+//			uopz_exception(
+//				"cannot delete function %s, it was not added by uopz",
+//				ZSTR_VAL(name));
+//		}
+//		/*zend_string_release(key);*/
+//		return 0;
+//	}
 
 //	if (clazz) {
 //		if (all) {
@@ -129,8 +129,8 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 //		}
 //	}
 
-	zend_hash_del(table, key);
-	zend_hash_del(functions, key);
+//	zend_hash_del(table, key);
+//	zend_hash_del(functions, key);
 	/*zend_string_release(key);*/
 	
 	return 1;
