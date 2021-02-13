@@ -42,7 +42,7 @@ void uopz_set_mock(zend_string *clazz, zval *mock) { /* {{{ */
 		zval_copy_ctor(mock);
 	}
 
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 } /* }}} */
 
 void uopz_unset_mock(zend_string *clazz) { /* {{{ */
@@ -52,12 +52,12 @@ void uopz_unset_mock(zend_string *clazz) { /* {{{ */
 		uopz_exception(
 			"the class provided (%s) has no mock set",
 			ZSTR_VAL(clazz));
-		zend_string_release(key);
+		/*zend_string_release(key);*/
 		return;
 	}
 
 	zend_hash_del(&UOPZ(mocks), key);
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 } /* }}} */
 
 int uopz_get_mock(zend_string *clazz, zval *return_value) { /* {{{ */
@@ -65,12 +65,12 @@ int uopz_get_mock(zend_string *clazz, zval *return_value) { /* {{{ */
 	zend_string *key = zend_string_tolower(clazz);
 	
 	if (!(mock = zend_hash_find(&UOPZ(mocks), key))) {
-		zend_string_release(key);
+		/*zend_string_release(key);*/
 		return FAILURE;
 	}
 
 	ZVAL_COPY(return_value, mock);
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 
 	return SUCCESS;
 } /* }}} */
@@ -79,7 +79,7 @@ int uopz_find_mock(zend_string *clazz, zend_object **object, zend_class_entry **
 	zend_string *key = zend_string_tolower(clazz);
 	zval *found = zend_hash_find(&UOPZ(mocks), key);
 
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 
 	if (!found) {
 		return FAILURE;

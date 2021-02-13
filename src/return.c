@@ -41,7 +41,7 @@ zend_bool uopz_set_return(zend_class_entry *clazz, zend_string *name, zval *valu
 				"failed to set return for %s::%s, the method does not exist",
 				ZSTR_VAL(clazz->name),
 				ZSTR_VAL(name));
-			zend_string_release(key);
+			/*zend_string_release(key);*/
 			return 0;
 		}
 
@@ -51,7 +51,7 @@ zend_bool uopz_set_return(zend_class_entry *clazz, zend_string *name, zval *valu
 				ZSTR_VAL(clazz->name),
 				ZSTR_VAL(name),
 				ZSTR_VAL(function->common.scope->name));
-			zend_string_release(key);
+			/*zend_string_release(key);*/
 			return 0;
 		}
 	}
@@ -77,7 +77,7 @@ zend_bool uopz_set_return(zend_class_entry *clazz, zend_string *name, zval *valu
 
 	zend_hash_update_mem(returns, key, &ret, sizeof(uopz_return_t));
 
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 	return 1;
 } /* }}} */
 
@@ -90,12 +90,12 @@ zend_bool uopz_unset_return(zend_class_entry *clazz, zend_string *function) { /*
 	} else returns = zend_hash_index_find_ptr(&UOPZ(returns), 0);
 
 	if (!returns || !zend_hash_exists(returns, key)) {
-		zend_string_release(key);
+		/*zend_string_release(key);*/
 		return 0;
 	}
 
 	zend_hash_del(returns, key);
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 
 	return 1;
 } /* }}} */
@@ -153,7 +153,7 @@ uopz_return_t* uopz_find_return(zend_function *function) { /* {{{ */
 
 	key = zend_string_tolower(function->common.function_name);
 	ureturn = zend_hash_find_ptr(returns, key);
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 
 	return ureturn;
 } /* }}} */
@@ -209,7 +209,7 @@ void uopz_execute_return(uopz_return_t *ureturn, zend_execute_data *execute_data
 void uopz_return_free(zval *zv) { /* {{{ */
 	uopz_return_t *ureturn = Z_PTR_P(zv);
 	
-	zend_string_release(ureturn->function);
+	/*zend_string_release(ureturn->function);*/
 	zval_ptr_dtor(&ureturn->value);
 	efree(ureturn);
 } /* }}} */

@@ -41,7 +41,7 @@ zend_bool uopz_set_hook(zend_class_entry *clazz, zend_string *name, zval *closur
 				"failed to set hook for %s::%s, the method does not exist",
 				ZSTR_VAL(clazz->name),
 				ZSTR_VAL(name));
-			zend_string_release(key);
+			/*zend_string_release(key);*/
 			return 0;
 		}
 
@@ -51,7 +51,7 @@ zend_bool uopz_set_hook(zend_class_entry *clazz, zend_string *name, zval *closur
 				ZSTR_VAL(clazz->name),
 				ZSTR_VAL(name),
 				ZSTR_VAL(function->common.scope->name));
-			zend_string_release(key);
+			/*zend_string_release(key);*/
 			return 0;
 		}
 	}
@@ -76,7 +76,7 @@ zend_bool uopz_set_hook(zend_class_entry *clazz, zend_string *name, zval *closur
 
 	zend_hash_update_mem(
 		hooks, key, &hook, sizeof(uopz_hook_t));
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 	return 1;
 } /* }}} */
 
@@ -89,12 +89,12 @@ zend_bool uopz_unset_hook(zend_class_entry *clazz, zend_string *function) { /* {
 	} else hooks = zend_hash_index_find_ptr(&UOPZ(hooks), 0);
 
 	if (!hooks || !zend_hash_exists(hooks, key)) {
-		zend_string_release(key);
+		/*zend_string_release(key);*/
 		return 0;
 	}
 
 	zend_hash_del(hooks, key);
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 
 	return 1;
 } /* }}} */
@@ -109,7 +109,7 @@ void uopz_get_hook(zend_class_entry *clazz, zend_string *function, zval *return_
 	} else hooks = zend_hash_index_find_ptr(&UOPZ(hooks), 0);
 
 	if (!hooks || !zend_hash_exists(hooks, key)) {
-		zend_string_release(key);
+		/*zend_string_release(key);*/
 		return;
 	}
 
@@ -117,7 +117,7 @@ void uopz_get_hook(zend_class_entry *clazz, zend_string *function, zval *return_
 
 	ZVAL_COPY(return_value, &uhook->closure);
 
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 } /* }}} */
 
 uopz_hook_t* uopz_find_hook(zend_function *function) { /* {{{ */
@@ -147,7 +147,7 @@ uopz_hook_t* uopz_find_hook(zend_function *function) { /* {{{ */
 
 	key = zend_string_tolower(function->common.function_name);
 	uhook = zend_hash_find_ptr(hooks, key);
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 
 	return uhook;
 } /* }}} */
@@ -206,7 +206,7 @@ void uopz_execute_hook(uopz_hook_t *uhook, zend_execute_data *execute_data, zend
 void uopz_hook_free(zval *zv) { /* {{{ */
 	uopz_hook_t *uhook = Z_PTR_P(zv);
 	
-	zend_string_release(uhook->function);
+	/*zend_string_release(uhook->function);*/
 	zval_ptr_dtor(&uhook->closure);
 	efree(uhook);
 } /* }}} */

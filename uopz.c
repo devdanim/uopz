@@ -134,21 +134,21 @@ static PHP_RINIT_FUNCTION(uopz)
 		zend_alter_ini_entry(optimizer, value,
 			ZEND_INI_SYSTEM, ZEND_INI_STAGE_ACTIVATE);
 
-		zend_string_release(optimizer);
-		zend_string_release(value);
+		/*zend_string_release(optimizer);*/
+		/*zend_string_release(value);*/
 	}
 
 	spl = zend_string_init(ZEND_STRL("RuntimeException"), 0);
 	spl_ce_RuntimeException =
 			(ce = zend_lookup_class(spl)) ?
 				ce : zend_exception_get_default();
-	zend_string_release(spl);
+	/*zend_string_release(spl);*/
 
 	spl = zend_string_init(ZEND_STRL("InvalidArgumentException"), 0);
 	spl_ce_InvalidArgumentException =
 			(ce = zend_lookup_class(spl)) ?
 				ce : zend_exception_get_default();
-	zend_string_release(spl);
+	/*zend_string_release(spl);*/
 
 	uopz_request_init();
 

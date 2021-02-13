@@ -47,7 +47,7 @@ zend_bool uopz_add_function(zend_class_entry *clazz, zend_string *name, zval *cl
 				"will not replace existing function %s, use uopz_set_return instead",
 				ZSTR_VAL(name));
 		}
-		zend_string_release(key);
+		/*zend_string_release(key);*/
 		return 0;
 	}
 
@@ -88,7 +88,7 @@ zend_bool uopz_add_function(zend_class_entry *clazz, zend_string *name, zval *cl
 		uopz_handle_magic(clazz, name, function);
 	}
 
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 
 	return 1;
 } /* }}} */
@@ -110,7 +110,7 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 				"cannot delete function %s, it was not added by uopz",
 				ZSTR_VAL(name));
 		}
-		zend_string_release(key);
+		/*zend_string_release(key);*/
 		return 0;
 	}
 
@@ -131,7 +131,7 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 
 	zend_hash_del(table, key);
 	zend_hash_del(functions, key);
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 	
 	return 1;
 } /* }}} */

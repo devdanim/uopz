@@ -112,7 +112,7 @@ int uopz_find_function(HashTable *table, zend_string *name, zend_function **func
 	zend_string *key = zend_string_tolower(name);
 	zend_function *ptr = zend_hash_find_ptr(table, key);
 
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 
 	if (!ptr) {
 		return FAILURE;

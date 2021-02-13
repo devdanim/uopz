@@ -45,7 +45,7 @@ zend_bool uopz_constant_redefine(zend_class_entry *clazz, zend_string *name, zva
 			
 			zconstant = zend_hash_find_ptr(table, heap);
 
-			zend_string_release(key);
+			/*zend_string_release(key);*/
 
 			key = heap;
 		}
@@ -71,7 +71,7 @@ zend_bool uopz_constant_redefine(zend_class_entry *clazz, zend_string *name, zva
 			Z_TRY_ADDREF_P(variable);
 		}
 
-		zend_string_release(key);
+		/*zend_string_release(key);*/
 		return 1;
 	}
 
@@ -86,7 +86,7 @@ zend_bool uopz_constant_redefine(zend_class_entry *clazz, zend_string *name, zva
 		} else {
 			uopz_exception(
 				"failed to redefine the internal %s, not allowed", ZSTR_VAL(name));
-			zend_string_release(key);
+			/*zend_string_release(key);*/
 			return 0;
 		}
 
@@ -98,7 +98,7 @@ zend_bool uopz_constant_redefine(zend_class_entry *clazz, zend_string *name, zva
 		Z_TRY_ADDREF_P(variable);
 	}
 
-	zend_string_release(key);
+	/*zend_string_release(key);*/
 	return 1;
 } /* }}} */
 
@@ -124,7 +124,7 @@ zend_bool uopz_constant_undefine(zend_class_entry *clazz, zend_string *name) {
 				zconstant = zend_hash_find_ptr(table, heap);
 
 				if (!zconstant) {
-					zend_string_release(heap);
+					/*zend_string_release(heap);*/
 					return 0;
 				}
 
@@ -148,7 +148,7 @@ _uopz_constant_undefine:
 				"failed to undefine the internal constant %s, not allowed", ZSTR_VAL(name));
 
 			if (heap) {
-				zend_string_release(heap);
+				/*zend_string_release(heap);*/
 			}
 
 			return 0;
@@ -157,7 +157,7 @@ _uopz_constant_undefine:
 		zend_hash_del(table, name);
 
 		if (heap) {
-			zend_string_release(heap);
+			/*zend_string_release(heap);*/
 		}
 
 		return 1;
