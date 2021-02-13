@@ -114,20 +114,20 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 		return 0;
 	}
 
-	if (clazz) {
-		if (all) {
-			zend_class_entry *next;
-
-			ZEND_HASH_FOREACH_PTR(CG(class_table), next) {
-				if (next->parent == clazz) {
-					if (!zend_hash_exists(&next->function_table, key)) {
-						continue;
-					}
-					uopz_del_function(next, name, all);
-				}
-			} ZEND_HASH_FOREACH_END();
-		}
-	}
+//	if (clazz) {
+//		if (all) {
+//			zend_class_entry *next;
+//
+//			ZEND_HASH_FOREACH_PTR(CG(class_table), next) {
+//				if (next->parent == clazz) {
+//					if (!zend_hash_exists(&next->function_table, key)) {
+//						continue;
+//					}
+//					uopz_del_function(next, name, all);
+//				}
+//			} ZEND_HASH_FOREACH_END();
+//		}
+//	}
 
 	zend_hash_del(table, key);
 	zend_hash_del(functions, key);
