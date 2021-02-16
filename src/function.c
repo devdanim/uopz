@@ -31,9 +31,9 @@
 // TODO: temporary fix for https://github.com/krakjoe/uopz/issues
 void segfault_sigaction(int signal, siginfo_t *si, void *arg)
 {
-    printf("(temporary fix) caught segfault at address %p\n", si->si_addr);
     uopz_exception(
         "(temporary fix) caught segfault");
+    return 0;
 }
 
 ZEND_EXTERN_MODULE_GLOBALS(uopz);
