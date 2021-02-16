@@ -25,23 +25,13 @@
 #include "util.h"
 #include "function.h"
 #include "copy.h"
-// TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
+// TODO: temporary fix for https://github.com/krakjoe/uopz/issues
 #include "setjmp.h"
 jmp_buf buf;
 void magic_handler(int s)
 {
-
-    switch(s)
-    {
-
-        case SIGSEGV:
-        printf("\nSegmentation fault signal caught! Attempting recovery..");
-        longjmp(buf, 1);
-        break;
-    }
-
-    printf("\nAfter switch. Won't be reached");
-
+    printf("\nSegmentation fault signal caught! Attempting recovery..");
+    longjmp(buf, 1);
 }
 
 #include <Zend/zend_closures.h>
