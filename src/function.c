@@ -26,13 +26,7 @@
 #include "function.h"
 #include "copy.h"
 // TODO: temporary fix for https://github.com/krakjoe/uopz/issues
-#include "setjmp.h"
-jmp_buf buf;
-void magic_handler(int s)
-{
-    printf("\nSegmentation fault signal caught! Attempting recovery..");
-    longjmp(buf, 1);
-}
+#include "segvcatch.h"
 
 #include <Zend/zend_closures.h>
 
@@ -138,14 +132,12 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 	}
 
 	// TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
-    signal(SIGSEGV, magic_handler);
-    if(!setjmp(buf)) {
+	try {
 	    if (zend_hash_exists(table, key)) zend_hash_del(table, key);
 	    if (zend_hash_exists(functions, key)) zend_hash_del(functions, key);
 	    /*zend_string_release(key);*/
-    } else {
-        uopz_exception(
-            "temporary segfault catch (see https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720)");
+    } catch (std::exception& e) {
+        std::cerr << "Exception caught : " << e.what() << std::endl;
     }
 
 	return 1;
