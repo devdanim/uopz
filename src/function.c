@@ -129,8 +129,8 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 		}
 	}
 
-	if (zend_hash_exists(table, key)) zend_hash_del(table, key);
-	if (zend_hash_exists(functions, key)) zend_hash_del(functions, key);
+	/*if (zend_hash_exists(table, key)) zend_hash_del(table, key);*/
+	/*if (zend_hash_exists(functions, key)) zend_hash_del(functions, key);*/
 	uopz_request_shutdown();
 	/*zend_string_release(key);*/
 	
