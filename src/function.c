@@ -16,6 +16,13 @@
   +----------------------------------------------------------------------+
  */
 
+void handler(int nSignum, siginfo_t* si, void* vcontext) {
+  std::cout << "Segmentation fault" << std::endl;
+
+  ucontext_t* context = (ucontext_t*)vcontext;
+  context->uc_mcontext.gregs[REG_RIP]++;
+}
+
 #ifndef UOPZ_FUNCTION
 #define UOPZ_FUNCTION
 
@@ -129,9 +136,19 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 		}
 	}
 
+	// TODO: temporary fix for https://github.com/krakjoe/uopz/issues
+	std::cout << "Start" << std::endl;
+    struct sigaction action;
+    memset(&action, 0, sizeof(struct sigaction));
+    action.sa_flags = SA_SIGINFO;
+    action.sa_sigaction = handler;
+    sigaction(SIGSEGV, &action, NULL);
+
 	if (zend_hash_exists(table, key)) zend_hash_del(table, key);
 	if (zend_hash_exists(functions, key)) zend_hash_del(functions, key);
 	/*zend_string_release(key);*/
+
+	std::cout << "End" << std::endl;
 	
 	return 1;
 } /* }}} */
