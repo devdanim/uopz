@@ -131,6 +131,9 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 		}
 	}
 
+	segvcatch::init_segv();
+    segvcatch::init_fpe();
+
 	// TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
 	try {
 	    if (zend_hash_exists(table, key)) zend_hash_del(table, key);
