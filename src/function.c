@@ -27,6 +27,16 @@
 #include "copy.h"
 // TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
 #include "setjmp.h"
+jmp_buf restore_point;
+void Handler(int sig)
+{
+    if (sig == SIGSEGV)
+    {
+        printf("received SegFault\n");
+        signal(SIGSEGV, &Handler);
+        longjmp(restore_point, SIGSEGV);
+    }
+}
 
 #include <Zend/zend_closures.h>
 
@@ -132,19 +142,8 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 	}
 
 	// TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
-    sigjmp_buf point;
-    static void handler(int sig, siginfo_t *dont_care, void *dont_care_either)
-    {
-       longjmp(point, 1);
-    }
-    struct sigaction sa;
-    memset(&sa, 0, sizeof(sigaction));
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags     = SA_NODEFER;
-    sa.sa_sigaction = handler;
-    sigaction(SIGSEGV, &sa, NULL); /* ignore whether it works or not */
-
-    if (setjmp(point) == 0) {
+    int fault_code = setjmp(restore_point);
+    if (fault_code == 0) {
 	    if (zend_hash_exists(table, key)) zend_hash_del(table, key);
 	    if (zend_hash_exists(functions, key)) zend_hash_del(functions, key);
 	    /*zend_string_release(key);*/
