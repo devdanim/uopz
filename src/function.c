@@ -25,15 +25,16 @@
 #include "util.h"
 #include "function.h"
 #include "copy.h"
+#include "setjmp.h"
+
+sigjmp_buf point;
 
 #include <Zend/zend_closures.h>
 
-// TODO: temporary fix for https://github.com/krakjoe/uopz/issues
-void segfault_sigaction(int signal, siginfo_t *si, void *arg)
+// TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
+static void handler(int sig, siginfo_t *dont_care, void *dont_care_either)
 {
-    uopz_exception(
-        "(temporary fix) caught segfault");
-    return 0;
+   longjmp(point, 1);
 }
 
 ZEND_EXTERN_MODULE_GLOBALS(uopz);
@@ -137,17 +138,22 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 		}
 	}
 
-	// TODO: temporary fix for https://github.com/krakjoe/uopz/issues
-	struct sigaction sa;
-	memset(&sa, 0, sizeof(struct sigaction));
+	// TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
+    struct sigaction sa;
+    memset(&sa, 0, sizeof(sigaction));
     sigemptyset(&sa.sa_mask);
-    sa.sa_sigaction = segfault_sigaction;
-    sa.sa_flags   = SA_SIGINFO;
-    sigaction(SIGSEGV, &sa, NULL);
+    sa.sa_flags     = SA_NODEFER;
+    sa.sa_sigaction = handler;
+    sigaction(SIGSEGV, &sa, NULL); /* ignore whether it works or not */
 
-	if (zend_hash_exists(table, key)) zend_hash_del(table, key);
-	if (zend_hash_exists(functions, key)) zend_hash_del(functions, key);
-	/*zend_string_release(key);*/
+    if (setjmp(point) == 0) {
+	    if (zend_hash_exists(table, key)) zend_hash_del(table, key);
+	    if (zend_hash_exists(functions, key)) zend_hash_del(functions, key);
+	    /*zend_string_release(key);*/
+    } else {
+        uopz_exception(
+            "temporary segfault catch (see https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720)");
+    }
 
 	return 1;
 } /* }}} */
