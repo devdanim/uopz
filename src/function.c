@@ -25,17 +25,10 @@
 #include "util.h"
 #include "function.h"
 #include "copy.h"
+// TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
 #include "setjmp.h"
 
-sigjmp_buf point;
-
 #include <Zend/zend_closures.h>
-
-// TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
-static void handler(int sig, siginfo_t *dont_care, void *dont_care_either)
-{
-   longjmp(point, 1);
-}
 
 ZEND_EXTERN_MODULE_GLOBALS(uopz);
 
@@ -139,6 +132,11 @@ zend_bool uopz_del_function(zend_class_entry *clazz, zend_string *name, zend_boo
 	}
 
 	// TODO: temporary fix for https://github.com/krakjoe/uopz/issues + https://stackoverflow.com/a/32799720
+    sigjmp_buf point;
+    static void handler(int sig, siginfo_t *dont_care, void *dont_care_either)
+    {
+       longjmp(point, 1);
+    }
     struct sigaction sa;
     memset(&sa, 0, sizeof(sigaction));
     sigemptyset(&sa.sa_mask);
