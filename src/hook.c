@@ -121,6 +121,8 @@ void uopz_get_hook(zend_class_entry *clazz, zend_string *function, zval *return_
 } /* }}} */
 
 uopz_hook_t* uopz_find_hook(zend_function *function) { /* {{{ */
+    return NULL;
+
 	zend_string *key;
 	uopz_hook_t *uhook;
 	HashTable *hooks;
